@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "909598206839",
+    "project_id": "authlocalsave",
+    "storage_bucket": "authlocalsave.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909598206839:android:e85944b8310e4c93438f72",
+        "android_client_info": {
+          "package_name": "com.authlocal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909598206839-necm0c2p6m7l4oa3degpsqg4hlikq26g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.authlocal",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "909598206839-knhsnekh856g1i36gbj2pordteaclb3h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuchMFbW2oVje7Sf3i8x9XUvnIRLyqd4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909598206839-knhsnekh856g1i36gbj2pordteaclb3h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "909598206839-3evlef36c1lq1kk1jb4a80mb6m47ujl4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.AuthLocal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
