@@ -1,12 +1,11 @@
-
-import { enablePromise, openDatabase } from 'react-native-sqlite-storage';
+import {enablePromise, openDatabase} from 'react-native-sqlite-storage';
 import auth from '@react-native-firebase/auth';
 // Enable promise support
 enablePromise(true);
 
 // Open or create the database
 const getDBConnection = async () => {
-  return openDatabase({ name: 'appdb.db', location: 'default' });
+  return openDatabase({name: 'appdb.db', location: 'default'});
 };
 
 // Create users table if it doesn't exist
@@ -26,14 +25,12 @@ export const createTable = async () => {
   console.log('Table created or exists already');
 };
 
-
-
 // Function to check if a user exists by email and insert if not found
 export const checkAndInsertUser = async (name, email, month) => {
   const db = await getDBConnection();
   const checkQuery = 'SELECT * FROM users WHERE email = ?';
   const insertQuery = 'INSERT INTO users (name, email, month) VALUES (?, ?, ?)';
-  
+
   try {
     // Check if user exists
     const results = await db.executeSql(checkQuery, [email]);
@@ -53,10 +50,10 @@ export const checkAndInsertUser = async (name, email, month) => {
 };
 
 // Function to fetch user profile by email
-export const fetchUserProfileByEmail = async (email) => {
+export const fetchUserProfileByEmail = async email => {
   const db = await getDBConnection();
   const query = 'SELECT * FROM users WHERE email = ?';
-  
+
   try {
     const results = await db.executeSql(query, [email]);
     if (results[0].rows.length > 0) {
@@ -74,13 +71,14 @@ export const fetchUserProfileByEmail = async (email) => {
 };
 
 export const updateUserProfile = async (name, age, mobile, email) => {
-  const db = await getDBConnection();  // Get the database connection
-  const query = 'UPDATE users SET name = ?, age = ?, mobile = ? WHERE email = ?';
+  const db = await getDBConnection(); // Get the database connection
+  const query =
+    'UPDATE users SET name = ?, age = ?, mobile = ? WHERE email = ?';
 
   try {
-    const results = await db.executeSql(query, [name, age, mobile, email]); 
+    const results = await db.executeSql(query, [name, age, mobile, email]);
     console.log(results);
-    
+
     // Check rowsAffected from the first result set
     if (results[0].rowsAffected > 0) {
       console.log('User profile updated successfully for email:', email);
@@ -94,7 +92,6 @@ export const updateUserProfile = async (name, age, mobile, email) => {
     throw error; // Re-throw error for further handling
   }
 };
-
 
 export const fetchAllUsers = async () => {
   const db = await getDBConnection(); // Get the database connection
@@ -119,14 +116,22 @@ export const fetchAllUsers = async () => {
   }
 };
 
-
 export const countUsersByMonth = async () => {
   const db = await getDBConnection(); // Get the database connection
   const currentDate = new Date();
   const months = [
-    'January', 'February', 'March', 'April', 
-    'May', 'June', 'July', 'August', 
-    'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   // Get current month index
@@ -139,7 +144,7 @@ export const countUsersByMonth = async () => {
     lastFiveMonths.push(months[monthIndex]);
   }
 
-  const userCounts = lastFiveMonths.map(month => ({ month, count: 0 })); // Initialize counts for each month
+  const userCounts = lastFiveMonths.map(month => ({month, count: 0})); // Initialize counts for each month
 
   try {
     // Loop through each month and count users
@@ -148,7 +153,8 @@ export const countUsersByMonth = async () => {
       const results = await db.executeSql(query, [month]);
 
       if (results[0].rows.length > 0) {
-        userCounts.find(m => m.month === month).count = results[0].rows.item(0).count; // Update count for the month
+        userCounts.find(m => m.month === month).count =
+          results[0].rows.item(0).count; // Update count for the month
       }
     }
 
@@ -159,7 +165,6 @@ export const countUsersByMonth = async () => {
     throw error; // Re-throw error for further handling
   }
 };
-
 
 export const createContactTable = async () => {
   const db = await getDBConnection(); // Get the database connection
@@ -186,31 +191,11 @@ export const createContactTable = async () => {
   }
 };
 
-
-// export const addContactDetails = async (contactData) => {
-//   const db = await getDBConnection(); // Get the database connection
-
-//   const { name, email, phone, experience, salaryExpectation, position } = contactData;
-
-//   const insertQuery = `
-//     INSERT INTO contacts (name, email, phone, experience, salaryExpectation, position)
-//     VALUES (?, ?, ?, ?, ?, ?); 
-//   `;
-
-//   try {
-//     await db.executeSql(insertQuery, [name, email, phone, experience, salaryExpectation, position]);
-//     console.log('Contact details added successfully.');
-//   } catch (error) {
-//     console.error('Error adding contact details', error);
-//     throw error; // Re-throw error for further handling
-//   }
-// };
-
-
-export const addContactDetails = async (contactData) => {
+export const addContactDetails = async contactData => {
   const db = await getDBConnection(); // Get the database connection
 
-  const { name, email, phone, experience, salaryExpectation, position } = contactData;
+  const {name, email, phone, experience, salaryExpectation, position} =
+    contactData;
 
   // Get the currently logged-in user's email
   const currentUser = auth().currentUser;
@@ -228,60 +213,21 @@ export const addContactDetails = async (contactData) => {
 
   try {
     // Add the contact details along with the logged-in user's email as a reference
-    await db.executeSql(insertQuery, [name, email, phone, experience, salaryExpectation, position, loggedInUserEmail]);
+    await db.executeSql(insertQuery, [
+      name,
+      email,
+      phone,
+      experience,
+      salaryExpectation,
+      position,
+      loggedInUserEmail,
+    ]);
     console.log('Contact details added successfully.');
   } catch (error) {
     console.error('Error adding contact details', error);
     throw error; // Re-throw error for further handling
   }
 };
-
-
-export const fetchContactsByUserId = async (userId) => {
-  const db = await getDBConnection(); // Get the database connection
-  const query = 'SELECT * FROM contacts WHERE userId = ?'; // Query to fetch contacts by user ID
-
-  try {
-    const results = await db.executeSql(query, [userId]); // Execute the query
-    const contacts = [];
-
-    // Loop through the results and push each contact to the contacts array
-    results.forEach(result => {
-      for (let index = 0; index < result.rows.length; index++) {
-        contacts.push(result.rows.item(index)); // Add contact object to the array
-      }
-    });
-
-    console.log('Fetched contacts:', contacts); // Log the fetched contacts
-    return contacts; // Return the array of contacts
-  } catch (error) {
-    console.error('Error fetching contacts', error);
-    throw error; // Re-throw error for further handling
-  }
-};
-
-
-export const fetchUserIdByEmail = async (email) => {
-  const db = await getDBConnection(); // Get the database connection
-  const query = 'SELECT id FROM users WHERE email = ?'; // Query to fetch user ID by email
-
-  try {
-    const results = await db.executeSql(query, [email]); // Execute the query
-
-    if (results[0].rows.length > 0) {
-      const userId = results[0].rows.item(0).id; // Get the user ID
-      console.log('Fetched user ID:', userId); // Log the fetched user ID
-      return userId; // Return the user ID
-    } else {
-      console.log('No user found with this email.');
-      return null; // Return null if no user found
-    }
-  } catch (error) {
-    console.error('Error fetching user ID', error);
-    throw error; // Re-throw error for further handling
-  }
-};
-
 
 export const fetchContactsByCurrentUser = async () => {
   const db = await getDBConnection(); // Get the database connection
@@ -319,4 +265,3 @@ export const fetchContactsByCurrentUser = async () => {
     throw error; // Re-throw error for further handling
   }
 };
-
